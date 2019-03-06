@@ -22,7 +22,7 @@
 /*------------------------------------------------*/
 #define NAME_VISUALISER "display "
 #define NAME_IMG_IN  "lena128"
-#define NAME_IMG_OUT "lena512_InterpolPPV"
+#define NAME_IMG_OUT "image-TpIFT3205-2-1b"
 
 /*------------------------------------------------*/
 /* PROTOTYPE DE FONCTIONS  -----------------------*/   
@@ -32,16 +32,30 @@
 /*------------------------------------------------*/
 /* PROGRAMME PRINCIPAL   -------------------------*/                     
 /*------------------------------------------------*/
-void InterpolPPV(float** Mat,float** MatI,int length,int width)
+void InterpolBilineaire(float** Mat,float** MatI,int length,int width)
  {
+   float a;
+   float b;
+   float c;
+   float d;
    int x;
    int y;
-   for (int i=0; i<length*4; i++)
-     for (int j=0; j<width*4; j++)
+   float w; // width inter-point
+   float l; // length inter-point
+   for (int i=0; i<(length*4)-4; i++)
+     for (int j=0; j<(width*4)-4; j++)
        {
-         x=round(i/4);
-         y=round(j/4);
-         MatI[i][j]=Mat[x][y];
+         x = (int) i/4;
+         y = (int) j/4;
+         a = Mat[x][y];
+         b = Mat[x][y+1];
+         c = Mat[x+1][y];
+         d = Mat[x+1][y+1];
+
+         w = ((float)j-(float)y*4.0)/4.0;
+         l = ((float)i-(float)x*4.0)/4.0;
+
+         MatI[i][j] = a*(1-w)*(1-l) + b*(w)*(1-l) + c*(l)*(1-w) + d*(w*l);
        }
  }
 
@@ -56,7 +70,7 @@ int main(int argc,char **argv)
   float** MatriceImg2=fmatrix_allocate_2d(length*4,width*4);
 
   //Interpolation PPV
-  InterpolPPV(MatriceImg1,MatriceImg2,length,width);
+  InterpolBilineaire(MatriceImg1,MatriceImg2,length,width);
  
   //Sauvegarde
   SaveImagePgm(NAME_IMG_OUT,MatriceImg2,length*4,width*4);

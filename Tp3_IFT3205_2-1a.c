@@ -22,7 +22,7 @@
 /*------------------------------------------------*/
 #define NAME_VISUALISER "display "
 #define NAME_IMG_IN  "lena128"
-#define NAME_IMG_OUT "lena512_InterpolPPV"
+#define NAME_IMG_OUT "image-TpIFT3205-2-1a"
 
 /*------------------------------------------------*/
 /* PROTOTYPE DE FONCTIONS  -----------------------*/   
